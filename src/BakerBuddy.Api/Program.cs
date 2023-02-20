@@ -1,3 +1,6 @@
+using BakerBuddy.Api.Infrastructure;
+using BakerBuddy.Recipes;
+
 namespace BakerBuddy.Api
 {
     public class Program
@@ -6,18 +9,31 @@ namespace BakerBuddy.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var settings = new Settings();
+
+            builder.Configuration.Bind(settings);
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            
             builder.Services.AddLogging(
                 loggingBuilder =>
                 {
-                    loggingBuilder.AddConsole();
+                    loggingBuilder
+                       .AddApplicationInsights(
+                            configureTelemetryConfiguration: (config) => config.ConnectionString = settings.ApplicationInsights.ConnectionString,
+                            configureApplicationInsightsLoggerOptions: (options) => { }
+                        )
+                       .AddConsole();
                 }
             );
 
             builder.Services.AddHealthChecks();
+
+            builder.Services.AddTransient<ICreateRecipeUseCase, CreateRecipeUseCase>();
+
+            builder.Services.AddSingleton<GlobalExceptionLogger>();
 
             var app = builder.Build();
 
