@@ -37,6 +37,7 @@ namespace BakerBuddy.Api
             builder.Services.AddTransient<ICreateRecipeUseCase, CreateRecipeUseCase>();
 
             builder.Services.AddSingleton<GlobalExceptionLogger>();
+            builder.Services.AddSingleton((IDbSettings)settings);
 
             var app = builder.Build();
 
