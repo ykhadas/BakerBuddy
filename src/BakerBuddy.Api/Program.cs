@@ -1,4 +1,6 @@
 using BakerBuddy.Api.Infrastructure;
+using BakerBuddy.Persistence.Recipes;
+using BakerBuddy.Ports;
 using BakerBuddy.Recipes;
 
 namespace BakerBuddy.Api
@@ -16,7 +18,7 @@ namespace BakerBuddy.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
             builder.Services.AddLogging(
                 loggingBuilder =>
                 {
@@ -31,6 +33,7 @@ namespace BakerBuddy.Api
 
             builder.Services.AddHealthChecks();
 
+            builder.Services.AddTransient<IRecipesDataStore, RecipesDataStore>();
             builder.Services.AddTransient<ICreateRecipeUseCase, CreateRecipeUseCase>();
 
             builder.Services.AddSingleton<GlobalExceptionLogger>();
