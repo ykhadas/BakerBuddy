@@ -6,10 +6,10 @@ namespace BakerBuddy.Api.Recipes
     public class IngredientApiRequest
     {
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         [Required]
-        public int Gramms { get; set; }
+        public int Gramms { get; set; } = default!;
 
         [Required]
         public IngredientType IngredientType { get; set; }

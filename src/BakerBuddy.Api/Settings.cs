@@ -4,7 +4,7 @@ namespace BakerBuddy.Api
 {
     public class Settings: IDbSettings
     {
-        public ApplicationInsightsSettings ApplicationInsights{ get; set; }
-        public string DbConnectionString { get; set; }
+        public ApplicationInsightsSettings ApplicationInsights{ get; set; } = default!;
+        public string DbConnectionString { get; set; } = default!;
     }
 }

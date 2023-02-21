@@ -9,11 +9,11 @@ namespace BakerBuddy.Api.Recipes
         [Range(1, long.MaxValue)]
         public ulong UserId { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
         [Required]
-        public IReadOnlyCollection<IngredientApiRequest> Ingredients { get; set; }
+        public IReadOnlyCollection<IngredientApiRequest> Ingredients { get; set; } = default!;
 
         public Recipe ToRecipe()
         {

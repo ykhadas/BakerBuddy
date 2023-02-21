@@ -7,7 +7,7 @@ namespace BakerBuddy.Persistence.Tests
     {
         public static TestSettings Instance { get; }
 
-        public string DbConnectionString { get; set; }
+        public string DbConnectionString { get; set; } = default!;
 
         static TestSettings()
         {
