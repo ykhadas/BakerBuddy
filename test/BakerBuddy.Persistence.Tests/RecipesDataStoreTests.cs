@@ -3,7 +3,9 @@ using BakerBuddy.Persistence.Recipes;
 using BakerBuddy.Ports;
 using BakerBuddy.Recipes;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Xunit;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace BakerBuddy.Persistence.Tests
 {
@@ -43,7 +45,7 @@ namespace BakerBuddy.Persistence.Tests
 
         private IRecipesDataStore CreateSut()
         {
-            return new RecipesDataStore(TestSettings.Instance);
+            return new RecipesDataStore(LoggerFactory.Create(b => b.SetMinimumLevel(LogLevel.Information)).CreateLogger<RecipesDataStore>(), TestSettings.Instance);
         }
     }
 }

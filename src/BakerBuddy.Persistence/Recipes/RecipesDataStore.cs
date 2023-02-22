@@ -1,27 +1,39 @@
 ﻿using System.Transactions;
+using BakerBuddy.Persistence.Exceptions;
 using BakerBuddy.Ports;
 using BakerBuddy.Recipes;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 
 namespace BakerBuddy.Persistence.Recipes
 {
     public class RecipesDataStore : IRecipesDataStore
     {
         private readonly IDbSettings _settings;
+        private readonly ILogger<RecipesDataStore> _logger;
 
-        public RecipesDataStore(IDbSettings settings)
+        public RecipesDataStore(ILogger<RecipesDataStore> logger, IDbSettings settings)
         {
+            _logger = logger;
             _settings = settings;
         }
 
         public async Task<long> CreateRecipeAsync(Recipe recipe)
         {
-            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            var recipeId = await CreateRecipe(recipe);
-            await CreateIngredients(recipe, recipeId);
-            transaction.Complete();
-            return recipeId;
+            try
+            {
+                using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+                var recipeId = await CreateRecipe(recipe);
+                await CreateIngredients(recipe, recipeId);
+                transaction.Complete();
+                return recipeId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while executing query to create a recipe");
+                throw new PersistenceException("Exception occurred while persisting a recipe.");
+            }
         }
 
         public async Task CreateIngredients(Recipe recipe, long recipeId)
